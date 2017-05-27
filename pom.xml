@@ -60,12 +60,12 @@
 		<dependency>
 			<groupId>nl.topicus</groupId>
 			<artifactId>spanner-jdbc</artifactId>
-			<version>0.4</version>
+			<version>0.5</version>
 		</dependency>
 		<dependency>
 			<groupId>nl.topicus</groupId>
 			<artifactId>spanner-hibernate</artifactId>
-			<version>0.1</version>
+			<version>0.2</version>
 		</dependency>
 	</dependencies>
 
