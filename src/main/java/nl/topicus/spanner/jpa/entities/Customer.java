@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 @Entity
 public class Customer extends BaseEntity
 {
+	private static final long serialVersionUID = 1L;
 
 	@Column(length = 50, nullable = true)
 	private String firstName;

@@ -11,6 +11,8 @@ import javax.persistence.ManyToOne;
 @Entity
 public class Invoice extends BaseEntity
 {
+	private static final long serialVersionUID = 1L;
+
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(nullable = false, name = "customer")
 	private Customer customer;

@@ -1,5 +1,6 @@
 package nl.topicus.spanner.jpa.entities;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
 
@@ -10,10 +11,15 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 
 import com.fasterxml.uuid.Generators;
+import com.fasterxml.uuid.NoArgGenerator;
 
 @MappedSuperclass
-public class BaseEntity
+public class BaseEntity implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+
+	private static final NoArgGenerator GENERATOR = Generators.randomBasedGenerator();
+
 	@Id
 	private Long id;
 
@@ -39,7 +45,7 @@ public class BaseEntity
 	public UUID getUuid()
 	{
 		if (uuid == null)
-			uuid = Generators.randomBasedGenerator().generate();
+			uuid = GENERATOR.generate();
 		return uuid;
 	}
 
@@ -54,9 +60,9 @@ public class BaseEntity
 		created = new Date();
 		updated = new Date();
 		if (uuid == null)
-			uuid = Generators.randomBasedGenerator().generate();
+			uuid = GENERATOR.generate();
 		if (id == null)
-			id = uuid.getMostSignificantBits();
+			id = uuid.getMostSignificantBits() ^ uuid.getLeastSignificantBits();
 	}
 
 	@PreUpdate
@@ -70,10 +76,10 @@ public class BaseEntity
 	{
 		if (this == other)
 			return true;
-		if (!(other instanceof Customer))
+		if (!(other instanceof BaseEntity))
 			return false;
 
-		return ((Customer) other).getUuid().equals(this.getUuid());
+		return ((BaseEntity) other).getUuid().equals(this.getUuid());
 	}
 
 	@Override
