@@ -60,12 +60,19 @@
 		<dependency>
 			<groupId>nl.topicus</groupId>
 			<artifactId>spanner-jdbc</artifactId>
-			<version>0.14</version>
+			<version>0.19</version>
+			<classifier>shaded</classifier>
+		</dependency>
+		<dependency>
+			<groupId>nl.topicus</groupId>
+			<artifactId>spanner-jdbc</artifactId>
+			<version>0.19</version>
+			<classifier>shaded-sources</classifier>
 		</dependency>
 		<dependency>
 			<groupId>nl.topicus</groupId>
 			<artifactId>spanner-hibernate</artifactId>
-			<version>0.2</version>
+			<version>0.3</version>
 		</dependency>
 	</dependencies>
 
