@@ -5,10 +5,14 @@ import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Entity
+@Table(indexes = { @Index(name = "IDX_INVOICE_CUSTOMER", columnList = "customer"),
+		@Index(name = "IDX_INVOICE_INVOICENUMBER_DESCRIPTION", columnList = "invoiceNumber, description") })
 public class Invoice extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
