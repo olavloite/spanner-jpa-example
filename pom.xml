@@ -60,14 +60,7 @@
 		<dependency>
 			<groupId>nl.topicus</groupId>
 			<artifactId>spanner-jdbc</artifactId>
-			<version>0.19</version>
-			<classifier>shaded</classifier>
-		</dependency>
-		<dependency>
-			<groupId>nl.topicus</groupId>
-			<artifactId>spanner-jdbc</artifactId>
-			<version>0.19</version>
-			<classifier>shaded-sources</classifier>
+			<version>0.20</version>
 		</dependency>
 		<dependency>
 			<groupId>nl.topicus</groupId>
