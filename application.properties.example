@@ -7,3 +7,4 @@ spring.jpa.open-in-view=true
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.properties.hibernate.dialect = nl.topicus.hibernate.dialect.CloudSpannerDialect
 spring.jpa.hibernate.naming.physical-strategy=org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+spring.jpa.properties.hibernate.schema_management_tool = nl.topicus.hibernate.dialect.CloudSpannerSchemaManagementTool
