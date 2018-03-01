@@ -4,24 +4,31 @@ import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-
-import nl.topicus.spanner.jpa.entities.Customer;
-import nl.topicus.spanner.jpa.entities.CustomerRepository;
-import nl.topicus.spanner.jpa.entities.Invoice;
-import nl.topicus.spanner.jpa.entities.InvoiceRepository;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import nl.topicus.spanner.jpa.entities.Customer;
+import nl.topicus.spanner.jpa.entities.CustomerRepository;
+import nl.topicus.spanner.jpa.entities.Invoice;
+import nl.topicus.spanner.jpa.entities.InvoiceRepository;
+import nl.topicus.spanner.jpa.entities.PhoneRepository;
+import nl.topicus.spanner.jpa.service.EntityService;
+
 @SpringBootApplication
 public class Application
 {
 	private static final Logger log = LoggerFactory.getLogger(Application.class);
+
+	@Autowired
+	private EntityService service;
 
 	public static void main(String[] args)
 	{
@@ -29,7 +36,8 @@ public class Application
 	}
 
 	@Bean
-	public CommandLineRunner demo(CustomerRepository customerRepo, InvoiceRepository invoiceRepo)
+	public CommandLineRunner demo(CustomerRepository customerRepo, InvoiceRepository invoiceRepo,
+			PhoneRepository phoneRepo)
 	{
 		return (args) -> {
 			// reset repositories
@@ -45,9 +53,20 @@ public class Application
 
 			byte[] pdf = Files.readAllBytes(Paths.get(Application.class.getResource("pdf-sample.pdf").toURI()));
 			List<Long> invoiceIds = new ArrayList<>();
-			invoiceIds.add(invoiceRepo.save(
-					new Invoice(customerRepo.findOne(customerIds.get(0)), "001", BigDecimal.valueOf(29.50), pdf))
+			invoiceIds.add(invoiceRepo
+					.save(new Invoice(customerRepo.findOne(customerIds.get(0)), "001", BigDecimal.valueOf(29.50), pdf))
 					.getId());
+
+			// create phones
+			for (Long customerId : customerIds)
+			{
+				service.addPhone(customerId, 123);
+			}
+			// update phones
+			for (Long customerId : customerIds)
+			{
+				service.setPhones(customerId, Arrays.asList(1, 2, 3));
+			}
 
 			// fetch all customers
 			log.info("Customers found with findAll():");
