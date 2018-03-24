@@ -6,10 +6,12 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 
 @Entity
@@ -17,6 +19,9 @@ import javax.persistence.Table;
 public class Customer extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
+
+	@Id
+	private Long customerId;
 
 	@Column(length = 50, nullable = true)
 	private String firstName;
@@ -28,6 +33,7 @@ public class Customer extends BaseEntity
 	@JoinTable(name = "CustomerPhone", joinColumns = {
 			@JoinColumn(name = "customer_id", referencedColumnName = "id") }, inverseJoinColumns = {
 					@JoinColumn(name = "phone_id", referencedColumnName = "id", unique = true) })
+	@OrderColumn(name = "phone_order")
 	private List<Phone> phones = new ArrayList<>();
 
 	protected Customer()
@@ -74,5 +80,15 @@ public class Customer extends BaseEntity
 	public void setPhones(List<Phone> phones)
 	{
 		this.phones = phones;
+	}
+
+	public Long getCustomerId()
+	{
+		return customerId;
+	}
+
+	public void setCustomerId(Long customerId)
+	{
+		this.customerId = customerId;
 	}
 }

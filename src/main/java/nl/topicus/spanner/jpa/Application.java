@@ -74,6 +74,7 @@ public class Application
 			for (Customer customer : customerRepo.findAll())
 			{
 				log.info(customer.toString());
+				service.printPhones(customer.getId());
 			}
 			log.info("");
 
