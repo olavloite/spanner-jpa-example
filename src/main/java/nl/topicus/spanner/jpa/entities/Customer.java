@@ -6,7 +6,6 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -19,9 +18,6 @@ import javax.persistence.Table;
 public class Customer extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
-
-	@Id
-	private Long customerId;
 
 	@Column(length = 50, nullable = true)
 	private String firstName;
@@ -80,15 +76,5 @@ public class Customer extends BaseEntity
 	public void setPhones(List<Phone> phones)
 	{
 		this.phones = phones;
-	}
-
-	public Long getCustomerId()
-	{
-		return customerId;
-	}
-
-	public void setCustomerId(Long customerId)
-	{
-		this.customerId = customerId;
 	}
 }
