@@ -53,8 +53,8 @@ public class Application
 
 			byte[] pdf = Files.readAllBytes(Paths.get(Application.class.getResource("pdf-sample.pdf").toURI()));
 			List<Long> invoiceIds = new ArrayList<>();
-			invoiceIds.add(invoiceRepo
-					.save(new Invoice(customerRepo.findOne(customerIds.get(0)), "001", BigDecimal.valueOf(29.50), pdf))
+			invoiceIds.add(invoiceRepo.save(
+					new Invoice(customerRepo.findById(customerIds.get(0)).get(), "001", BigDecimal.valueOf(29.50), pdf))
 					.getId());
 
 			// create phones
@@ -79,7 +79,7 @@ public class Application
 			log.info("");
 
 			// fetch an individual customer by ID
-			Customer customer = customerRepo.findOne(customerIds.get(0));
+			Customer customer = customerRepo.findById(customerIds.get(0)).get();
 			log.info("Customer found with findOne(" + customerIds.get(0) + "):");
 			log.info("--------------------------------");
 			log.info(customer.toString());
@@ -95,7 +95,7 @@ public class Application
 			log.info("");
 
 			// fetch invoices
-			Invoice invoice = invoiceRepo.findOne(invoiceIds.get(0));
+			Invoice invoice = invoiceRepo.findById(invoiceIds.get(0)).get();
 			log.info("Invoice found with findOne(" + invoiceIds.get(0) + "):");
 			log.info("--------------------------------");
 			log.info(invoice.toString());

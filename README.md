@@ -1,6 +1,8 @@
 # spanner-jpa-example
 Example project for using JPA, Hibernate and Spring Boot with Google Cloud Spanner. This project is largely based on the example from the Spring Boot documentation (https://spring.io/guides/gs/accessing-data-jpa/).
 
+This example project can be run on a real Google Cloud Spanner instance or on the Cloud Spanner Emulator. See https://www.googlecloudspanner.com/2018/07/create-trial-account-for-cloud-spanner.html for more information on setting up an emulator instance.
+
 This project relies on two other open source projects:
 * spanner-jdbc (https://github.com/olavloite/spanner-jdbc): An open source JDBC Driver for Google Cloud Spanner
 * spanner-hibernate (https://github.com/olavloite/spanner-hibernate): A Hibernate Dialect for Google Cloud Spanner

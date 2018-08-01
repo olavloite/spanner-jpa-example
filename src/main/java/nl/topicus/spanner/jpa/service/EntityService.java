@@ -27,7 +27,7 @@ public class EntityService
 	@Transactional(value = TxType.REQUIRED)
 	public void addPhone(Long customerId, Integer tel)
 	{
-		Customer customer = customerRepo.findOne(customerId);
+		Customer customer = customerRepo.findById(customerId).get();
 		Phone phone = new Phone();
 		phone.setNumber(tel);
 		customer.getPhones().add(phone);
@@ -40,7 +40,7 @@ public class EntityService
 		List<Phone> phones = tels.stream().map(tel -> {
 			return new Phone(tel);
 		}).collect(Collectors.toList());
-		Customer customer = customerRepo.findOne(customerId);
+		Customer customer = customerRepo.findById(customerId).get();
 		customer.setPhones(phones);
 		customerRepo.save(customer);
 	}
@@ -48,7 +48,7 @@ public class EntityService
 	@Transactional(value = TxType.REQUIRED)
 	public void printPhones(Long customerId)
 	{
-		Customer customer = customerRepo.findOne(customerId);
+		Customer customer = customerRepo.findById(customerId).get();
 		Iterator<Phone> phones = customer.getPhones().iterator();
 		while (phones.hasNext())
 			log.info(phones.next().getNumber().toString());
