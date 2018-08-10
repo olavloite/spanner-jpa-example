@@ -14,6 +14,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.domain.PageRequest;
 
 import nl.topicus.spanner.jpa.entities.Customer;
 import nl.topicus.spanner.jpa.entities.CustomerRepository;
@@ -91,6 +92,15 @@ public class Application
 			for (Customer bauer : customerRepo.findByLastName("Bauer"))
 			{
 				log.info(bauer.toString());
+			}
+			log.info("");
+
+			// fetch customers using custom query
+			log.info("Customer found with custom query:");
+			log.info("--------------------------------------------");
+			for (Customer c : customerRepo.findCustomer(PageRequest.of(2, 100)))
+			{
+				log.info(c.toString());
 			}
 			log.info("");
 
