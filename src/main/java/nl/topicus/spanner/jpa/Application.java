@@ -18,6 +18,7 @@ import org.springframework.data.domain.PageRequest;
 
 import nl.topicus.spanner.jpa.entities.Customer;
 import nl.topicus.spanner.jpa.entities.CustomerRepository;
+import nl.topicus.spanner.jpa.entities.FormattedCustomerProjection;
 import nl.topicus.spanner.jpa.entities.Invoice;
 import nl.topicus.spanner.jpa.entities.InvoiceRepository;
 import nl.topicus.spanner.jpa.entities.PhoneRepository;
@@ -92,15 +93,42 @@ public class Application
 			for (Customer bauer : customerRepo.findByLastName("Bauer"))
 			{
 				log.info(bauer.toString());
+				log.info(bauer.getFullName());
 			}
 			log.info("");
 
 			// fetch customers using custom query
-			log.info("Customer found with custom query:");
+			log.info("Customer found with custom query (no results should be found):");
 			log.info("--------------------------------------------");
 			for (Customer c : customerRepo.findCustomer(PageRequest.of(2, 100)))
 			{
 				log.info(c.toString());
+			}
+			log.info("");
+
+			// fetch customers using by full name
+			log.info("Customer found by full name (concat) query:");
+			log.info("--------------------------------------------");
+			for (Customer c : customerRepo.findCustomerByConcatFullName(PageRequest.of(0, 100), "Jack Bauer"))
+			{
+				log.info(c.toString());
+			}
+			log.info("");
+
+			log.info("Customer found by full name automatic query:");
+			log.info("--------------------------------------------");
+			for (Customer c : customerRepo.findCustomerByFullName(PageRequest.of(0, 100), "Jack Bauer"))
+			{
+				log.info(c.toString());
+			}
+			log.info("");
+
+			// fetch customers with concatenated customer code
+			log.info("Customer list with formatted customer code:");
+			log.info("--------------------------------------------");
+			for (FormattedCustomerProjection c : customerRepo.listCustomerProjections())
+			{
+				log.info(c.getCode() + " | " + c.getFormattedCode());
 			}
 			log.info("");
 

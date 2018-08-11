@@ -13,6 +13,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Formula;
+
 @Entity
 @Table(indexes = { @Index(name = "IDX_CUSTOMER_LASTNAME", columnList = "lastName") })
 public class Customer extends BaseEntity
@@ -24,6 +26,9 @@ public class Customer extends BaseEntity
 
 	@Column(length = 100, nullable = false)
 	private String lastName;
+
+	@Formula("CONCAT(firstName, ' ', lastName)")
+	private String fullName;
 
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "CustomerPhone", joinColumns = {
@@ -45,7 +50,8 @@ public class Customer extends BaseEntity
 	@Override
 	public String toString()
 	{
-		return String.format("Customer[id=%d, firstName='%s', lastName='%s']", getId(), firstName, lastName);
+		return String.format("Customer[id=%d, firstName='%s', lastName='%s', fullName='%s']", getId(), firstName,
+				lastName, fullName);
 	}
 
 	public String getFirstName()
@@ -76,5 +82,15 @@ public class Customer extends BaseEntity
 	public void setPhones(List<Phone> phones)
 	{
 		this.phones = phones;
+	}
+
+	public String getFullName()
+	{
+		return fullName;
+	}
+
+	public void setFullName(String fullName)
+	{
+		this.fullName = fullName;
 	}
 }
