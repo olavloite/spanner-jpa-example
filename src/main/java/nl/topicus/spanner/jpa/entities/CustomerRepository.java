@@ -21,13 +21,9 @@ public interface CustomerRepository extends CrudRepository<Customer, Long>
 	Page<Customer> findCustomerByFullName(Pageable pageable, @Param("fullName") String fullName);
 
 	/**
-	 * The first (commented) query does not work because of the CONCAT(...) call
-	 * 
-	 * @return
+	 * Example query calling a custom function
 	 */
-	// @Query("SELECT c.uuid AS code, CONCAT('CODE-', c.uuid) AS
-	// formattedCode FROM Customer c")
-	@Query("SELECT c.uuid AS code, c.fullName as formattedCode FROM Customer c")
+	@Query("SELECT c.uuid AS code, CONCAT('CODE-', c.uuid) AS formattedCode FROM Customer c")
 	List<FormattedCustomerProjection> listCustomerProjections();
 
 }
