@@ -1,14 +1,14 @@
 package nl.topicus.spanner.jpa.entities;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.sql.Timestamp;
 import java.util.UUID;
 
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 
 import com.fasterxml.uuid.Generators;
 import com.fasterxml.uuid.NoArgGenerator;
@@ -26,11 +26,17 @@ public class BaseEntity implements Serializable
 	@Column(nullable = false, columnDefinition = "BYTES(16)", unique = true)
 	private UUID uuid;
 
-	@Column(nullable = false)
-	private Date created;
+	// This field is automatically filled with the commit timestamp on insert,
+	// and never updated
+	@Column(columnDefinition = "timestamp not null options (allow_commit_timestamp=true)", updatable = false)
+	@Convert(converter = CommitTimestampAttributeConverter.class)
+	private Timestamp created;
 
-	@Column(nullable = false)
-	private Date updated;
+	// This field is automatically filled with the commit timestamp on insert
+	// and update
+	@Column(columnDefinition = "timestamp not null options (allow_commit_timestamp=true)")
+	@Convert(converter = CommitTimestampAttributeConverter.class)
+	private Timestamp updated;
 
 	public Long getId()
 	{
@@ -57,18 +63,10 @@ public class BaseEntity implements Serializable
 	@PrePersist
 	protected void onCreate()
 	{
-		created = new Date();
-		updated = new Date();
 		if (uuid == null)
 			uuid = GENERATOR.generate();
 		if (id == null)
 			id = uuid.getMostSignificantBits() ^ uuid.getLeastSignificantBits();
-	}
-
-	@PreUpdate
-	protected void onUpdate()
-	{
-		updated = new Date();
 	}
 
 	@Override
@@ -91,6 +89,26 @@ public class BaseEntity implements Serializable
 	public boolean isSaved()
 	{
 		return getId() != null;
+	}
+
+	public Timestamp getCreated()
+	{
+		return created;
+	}
+
+	public Timestamp getUpdated()
+	{
+		return updated;
+	}
+
+	public void setCreated(Timestamp created)
+	{
+		this.created = created;
+	}
+
+	public void setUpdated(Timestamp updated)
+	{
+		this.updated = updated;
 	}
 
 }

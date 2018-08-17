@@ -3,6 +3,7 @@ package nl.topicus.spanner.jpa;
 import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -48,8 +49,10 @@ public class Application
 			// save a couple of customers
 			List<Long> customerIds = new ArrayList<>();
 			customerIds.add(customerRepo.save(new Customer("Jack", "Bauer")).getId());
+			Timestamp commitTimestampJackBauer = customerRepo.getLastCommitTimestamp();
 			customerIds.add(customerRepo.save(new Customer("Chloe", "O'Brian")).getId());
 			customerIds.add(customerRepo.save(new Customer("Kim", "Bauer")).getId());
+			Timestamp commitTimestampKimBauer = customerRepo.getLastCommitTimestamp();
 			customerIds.add(customerRepo.save(new Customer("David", "Palmer")).getId());
 			customerIds.add(customerRepo.save(new Customer("Michelle", "Dessler")).getId());
 
@@ -87,13 +90,18 @@ public class Application
 			log.info(customer.toString());
 			log.info("");
 
-			// fetch customers by last name
+			// fetch customers by last name and compare created/updated
+			// timestamps with commit timestamp
 			log.info("Customer found with findByLastName('Bauer'):");
 			log.info("--------------------------------------------");
+			log.info("Jack Bauer commit timestamp: " + commitTimestampJackBauer);
+			log.info("Kim Bauer commit timestamp: " + commitTimestampKimBauer);
 			for (Customer bauer : customerRepo.findByLastName("Bauer"))
 			{
 				log.info(bauer.toString());
 				log.info(bauer.getFullName());
+				log.info("created at: " + bauer.getCreated());
+				log.info("updated at: " + bauer.getUpdated());
 			}
 			log.info("");
 
