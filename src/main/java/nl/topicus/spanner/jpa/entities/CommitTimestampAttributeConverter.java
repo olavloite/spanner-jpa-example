@@ -8,7 +8,7 @@ public class CommitTimestampAttributeConverter implements AttributeConverter<Tim
 
   @Override
   public Timestamp convertToDatabaseColumn(Timestamp attribute) {
-    return CloudSpannerPreparedStatement.SPANNER_COMMIT_TIMESTAMP;
+    return CloudSpannerPreparedStatement.getSpannerCommitTimestamp();
   }
 
   @Override
