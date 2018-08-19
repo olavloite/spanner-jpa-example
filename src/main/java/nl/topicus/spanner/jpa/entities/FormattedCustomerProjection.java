@@ -1,10 +1,9 @@
 package nl.topicus.spanner.jpa.entities;
 
-public interface FormattedCustomerProjection
-{
+public interface FormattedCustomerProjection {
 
-	String getCode();
+  String getCode();
 
-	String getFormattedCode();
+  String getFormattedCode();
 
 }
