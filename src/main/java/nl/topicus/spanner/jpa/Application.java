@@ -58,7 +58,7 @@ public class Application {
           Files.readAllBytes(Paths.get(Application.class.getResource("pdf-sample.pdf").toURI()));
       List<Long> invoiceIds = new ArrayList<>();
       invoiceIds.add(invoiceRepo.save(new Invoice(customerRepo.findById(customerIds.get(0)).get(),
-          "001", BigDecimal.valueOf(29.50), pdf)).getId());
+          "001", "Some invoice", BigDecimal.valueOf(29.50), pdf)).getId());
 
       // create phones
       for (Long customerId : customerIds) {
@@ -116,6 +116,14 @@ public class Application {
       for (Customer c : customerRepo.findCustomerByConcatFullName(PageRequest.of(0, 100),
           "Jack Bauer")) {
         log.info(c.toString());
+      }
+      log.info("");
+
+      log.info("Invoice found by number and description (index hint) query:");
+      log.info("--------------------------------------------");
+      for (Invoice i : invoiceRepo.findInvoiceByNumberAndDescription(PageRequest.of(0, 100), "001",
+          "Some invoice")) {
+        log.info(i.toString());
       }
       log.info("");
 

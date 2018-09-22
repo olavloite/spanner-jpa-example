@@ -33,9 +33,11 @@ public class Invoice extends BaseEntity {
 
   public Invoice() {}
 
-  public Invoice(Customer customer, String invoiceNumber, BigDecimal amount, byte[] pdf) {
+  public Invoice(Customer customer, String invoiceNumber, String description, BigDecimal amount,
+      byte[] pdf) {
     setCustomer(customer);
     setInvoiceNumber(invoiceNumber);
+    setDescription(description);
     setAmount(amount);
     setPdf(pdf);
   }
