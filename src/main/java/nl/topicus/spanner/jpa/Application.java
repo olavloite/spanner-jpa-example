@@ -59,6 +59,8 @@ public class Application {
       List<Long> invoiceIds = new ArrayList<>();
       invoiceIds.add(invoiceRepo.save(new Invoice(customerRepo.findById(customerIds.get(0)).get(),
           "001", "Some invoice", BigDecimal.valueOf(29.50), pdf)).getId());
+      invoiceIds.add(invoiceRepo.save(new Invoice(customerRepo.findById(customerIds.get(1)).get(),
+          "002", "Some invoice 2", BigDecimal.valueOf(100.00), pdf)).getId());
 
       // create phones
       for (Long customerId : customerIds) {
