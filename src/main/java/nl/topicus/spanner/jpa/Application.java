@@ -1,8 +1,13 @@
 package nl.topicus.spanner.jpa;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.Writer;
 import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.sql.DriverManager;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,6 +20,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.PageRequest;
+import nl.topicus.jdbc.CloudSpannerDriver;
 import nl.topicus.spanner.jpa.entities.Customer;
 import nl.topicus.spanner.jpa.entities.CustomerRepository;
 import nl.topicus.spanner.jpa.entities.FormattedCustomerProjection;
@@ -27,10 +33,24 @@ import nl.topicus.spanner.jpa.service.EntityService;
 public class Application {
   private static final Logger log = LoggerFactory.getLogger(Application.class);
 
+
   @Autowired
   private EntityService service;
 
-  public static void main(String[] args) {
+  public static void main(String[] args) throws IOException {
+    // turn on JDBC debug logging to be able to find any (too) long running transactions
+    // long transactions are prone to be aborted by Cloud Spanner, and you should always try to keep
+    // your transactions as short as possible
+
+    // Set the log level. DEBUG means that the stack trace that started a long-running transaction
+    // will also be logged. This makes it a lot easier to find the piece of code that is causing the
+    // long-running transaction, especially if it is a transaction that is unintentionally started.
+    CloudSpannerDriver.setLogLevel(CloudSpannerDriver.DEBUG);
+    // Set a JDBC log writer. In this case the log file will be overwritten everytime you start the
+    // application.
+    Writer writer = new FileWriter("jdbc.log", false);
+    DriverManager.setLogWriter(new PrintWriter(writer));
+
     SpringApplication.run(Application.class);
   }
 
@@ -150,6 +170,13 @@ public class Application {
       log.info("--------------------------------");
       log.info(invoice.toString());
       log.info("");
+
+      // set the long transaction trigger to 1 second (default is 10 seconds) to force the logging
+      // of a 'long-running'transaction
+      CloudSpannerDriver.setLongTransactionTrigger(1000L);
+      log.info("Forcing long-running transaction");
+      service.findAllCustomersSlow();
+      log.info("Finished long-running transaction");
     };
   }
 }

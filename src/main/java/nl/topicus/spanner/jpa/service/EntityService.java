@@ -47,4 +47,22 @@ public class EntityService {
       log.info(phones.next().getNumber().toString());
   }
 
+  /**
+   * This method emulates a long transaction. Transactions should be kept as short as possible on
+   * Cloud Spanner, and the JDBC driver will log this slow transaction in a log file if logging has
+   * been setup for the JDBC driver.
+   * 
+   * @return All customers, but it will take at least 7 seconds
+   */
+  @Transactional(value = TxType.REQUIRED)
+  public Iterable<Customer> findAllCustomersSlow() {
+    Iterable<Customer> res = customerRepo.findAll();
+    try {
+      Thread.sleep(7000L);
+    } catch (InterruptedException e) {
+      // ignore
+    }
+    return res;
+  }
+
 }
