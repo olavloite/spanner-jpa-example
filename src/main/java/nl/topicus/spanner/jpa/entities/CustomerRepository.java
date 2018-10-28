@@ -34,7 +34,7 @@ public interface CustomerRepository extends CrudRepository<Customer, Long> {
   /**
    * Example query calling a custom function
    */
-  @Query("SELECT c.uuid AS code, CONCAT('CODE-', c.uuid) AS formattedCode FROM Customer c")
+  @Query("SELECT c.uuid AS code, CONCAT('CODE-', cast(c.uuid as string)) AS formattedCode FROM Customer c")
   List<FormattedCustomerProjection> listCustomerProjections();
 
 }
